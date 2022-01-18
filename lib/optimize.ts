@@ -1,4 +1,4 @@
-import experiments from './optimize-experiments.json'
+import experiments from "./optimize-experiments.json";
 
 /**
  * Returns the experiment to use, the overall flow is:
@@ -7,5 +7,5 @@ import experiments from './optimize-experiments.json'
  * - Start experimenting and then make decisions without having changed the original pages
  */
 export function getCurrentExperiment() {
-  return experiments.find((exp) => exp.name === 'Green button sells more 2')
+  return experiments.find((exp) => exp.name === "test-2");
 }
