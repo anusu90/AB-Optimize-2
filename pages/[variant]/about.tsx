@@ -1,31 +1,35 @@
-import { useEffect } from 'react'
-import Cookies from 'js-cookie'
-import { Text, Button } from '@vercel/examples-ui'
-import { getCurrentExperiment } from '@lib/optimize'
-import { COOKIE_NAME } from '@lib/constants'
-import { useGa } from '@lib/useGa'
-import OptimizeLayout from '@components/layout'
+import { useEffect } from "react";
+import Cookies from "js-cookie";
+import { Text, Button } from "@vercel/examples-ui";
+import { getCurrentExperiment } from "@lib/optimize";
+import { COOKIE_NAME } from "@lib/constants";
+import { useGa } from "@lib/useGa";
+import OptimizeLayout from "@components/layout";
+import { useRouter } from "next/router";
 
 export default function About({ experiment, variant }) {
-  const ga = useGa()
+  const router = useRouter();
+  console.log(router);
+  const ga = useGa();
   const sendEvent = () => {
     const event = {
-      hitType: 'event',
-      eventCategory: 'AB Testing',
-      eventAction: 'Clicked button',
-      eventLabel: 'AB Testing About button',
-    }
-    ga('send', event)
-    console.log('sent event:', event)
-  }
+      hitType: "event",
+      eventCategory: "AB Testing",
+      eventAction: "Clicked button",
+      eventLabel: "AB Testing About button",
+    };
+    ga("send", event);
+    console.log("sent event:", event);
+  };
 
   useEffect(() => {
-    const cookie = Cookies.get(COOKIE_NAME)
+    const cookie = Cookies.get(COOKIE_NAME);
+    console.log(cookie, ga);
     if (ga && cookie) {
-      ga('set', 'exp', cookie)
+      ga("set", "exp", cookie);
     }
-    ga('send', 'pageview')
-  }, [ga])
+    ga("send", "pageview");
+  }, [ga]);
 
   return (
     <>
@@ -43,25 +47,25 @@ export default function About({ experiment, variant }) {
         Send event
       </Button>
     </>
-  )
+  );
 }
 
-About.Layout = OptimizeLayout
+About.Layout = OptimizeLayout;
 
 export async function getStaticPaths() {
-  const experiment = getCurrentExperiment()
+  const experiment = getCurrentExperiment();
 
   return {
     paths: experiment.variants.map((v) => ({
       params: { variant: `${experiment.id}.${v.id}` },
     })),
     fallback: false,
-  }
+  };
 }
 
 export async function getStaticProps({ params }) {
-  const experiment = getCurrentExperiment()
-  const [, variantId] = params.variant.split('.')
+  const experiment = getCurrentExperiment();
+  const [, variantId] = params.variant.split(".");
 
   // Here you could fetch any data related only to the variant
   return {
@@ -70,5 +74,5 @@ export async function getStaticProps({ params }) {
       experiment: { name: experiment.name },
       variant: experiment.variants.find((v) => String(v.id) === variantId),
     },
-  }
+  };
 }

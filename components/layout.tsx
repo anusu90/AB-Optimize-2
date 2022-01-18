@@ -3,6 +3,9 @@ import Script from "next/script";
 import { Layout, Page } from "@vercel/examples-ui";
 import type { LayoutProps } from "@vercel/examples-ui/layout";
 import { GaProvider } from "@lib/useGa";
+import Cookies from "js-cookie";
+import { COOKIE_NAME } from "@lib/constants";
+import { Button } from "@mui/material";
 
 function throwIfSSR() {
   throw new Error("Using GA during SSR is not allowed");
@@ -20,6 +23,13 @@ const OptimizeLayout: FC<LayoutProps> = ({ children, ...props }) => {
     typeof window === "undefined" ? throwIfSSR : gaHandler,
     []
   );
+
+  const clearCookieAndReload = () => {
+    if (typeof window !== undefined) {
+      Cookies.remove(COOKIE_NAME);
+      window.location.reload();
+    }
+  };
 
   return (
     <Layout {...props}>
@@ -41,6 +51,15 @@ const OptimizeLayout: FC<LayoutProps> = ({ children, ...props }) => {
         <Script
           src={`https://www.googleoptimize.com/optimize.js?id=${process.env.NEXT_PUBLIC_OPTIMIZE_CONTAINER_ID}`}
         />
+        <div>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => clearCookieAndReload()}
+          >
+            CLEAR AND RELOAD
+          </Button>
+        </div>
         <GaProvider value={ga}>{children}</GaProvider>
       </Page>
     </Layout>
