@@ -16,7 +16,6 @@ function gaHandler() {
     (window as any).dataLayer || []);
 
   dataLayer.push(arguments);
-  console.log("test", arguments);
 }
 
 const OptimizeLayout: FC<LayoutProps> = ({ children, ...props }) => {
@@ -35,7 +34,7 @@ const OptimizeLayout: FC<LayoutProps> = ({ children, ...props }) => {
   return (
     <Layout {...props}>
       <Page>
-        <Script
+        {/* <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_TRACKING_ID}`}
           strategy="lazyOnload"
         ></Script>
@@ -48,7 +47,7 @@ const OptimizeLayout: FC<LayoutProps> = ({ children, ...props }) => {
               page_path: window.location.pathname,
             });
                 `}
-        </Script>
+        </Script> */}
         <Script
           src={`https://www.googleoptimize.com/optimize.js?id=${process.env.NEXT_PUBLIC_OPTIMIZE_CONTAINER_ID}`}
         />

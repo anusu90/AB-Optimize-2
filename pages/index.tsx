@@ -18,7 +18,7 @@ export default function Index() {
   }, []);
 
   useEffect(() => {
-    console.log("herere");
+    // console.log("herere");
     if (ga && cookie) {
       ga("set", "exp", cookie);
     }
@@ -32,12 +32,16 @@ export default function Index() {
       eventAction: "Clicked button",
       eventLabel: "AB Testing About button",
     };
+    (window as any).gtag("event", "Working", {
+      event_category: "test",
+      event_label: "test2",
+    });
     ga("send", event, "Signup Form", "submit", {
       hitCallback: function () {
-        console.log("event send");
+        console.log("It Worked");
       },
     });
-    console.log("sent event:", event);
+    // console.log("sent event:", event);
   };
 
   return (
