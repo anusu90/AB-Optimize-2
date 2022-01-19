@@ -1,28 +1,44 @@
-import { useEffect, useState } from 'react'
-import Cookies from 'js-cookie'
-import { Text, Code, Link, Button, List } from '@vercel/examples-ui'
-import { COOKIE_NAME } from '@lib/constants'
-import { useGa } from '@lib/useGa'
-import OptimizeLayout from '@components/layout'
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import { Text, Code, Link, Button, List } from "@vercel/examples-ui";
+import { COOKIE_NAME } from "@lib/constants";
+import { useGa } from "@lib/useGa";
+import OptimizeLayout from "@components/layout";
 
 export default function Index() {
-  const ga = useGa()
-  const [cookie, setCookie] = useState('')
+  const ga = useGa();
+  const [cookie, setCookie] = useState("");
   const removeCookie = () => {
-    Cookies.remove(COOKIE_NAME)
-    window.location.reload()
-  }
+    Cookies.remove(COOKIE_NAME);
+    window.location.reload();
+  };
 
   useEffect(() => {
-    setCookie(Cookies.get(COOKIE_NAME))
-  }, [])
+    setCookie(Cookies.get(COOKIE_NAME));
+  }, []);
 
   useEffect(() => {
+    console.log("herere");
     if (ga && cookie) {
-      ga('set', 'exp', cookie)
+      ga("set", "exp", cookie);
     }
-    ga('send', 'pageview')
-  }, [ga, cookie])
+    ga("send", "pageview");
+  }, [ga, cookie]);
+
+  const sendEvent = () => {
+    const event = {
+      hitType: "event",
+      eventCategory: "AB Testing",
+      eventAction: "Clicked button",
+      eventLabel: "AB Testing About button",
+    };
+    ga("send", event, "Signup Form", "submit", {
+      hitCallback: function () {
+        console.log("event send");
+      },
+    });
+    console.log("sent event:", event);
+  };
 
   return (
     <>
@@ -31,8 +47,8 @@ export default function Index() {
       </Text>
       <Text className="mb-4">
         Once you load this page, there's a new <Code>{COOKIE_NAME}</Code> cookie
-        set in the browser, it has the shape of{' '}
-        <Code>{'${experimentId}.${variantId}'}</Code>. You're assigned to:{' '}
+        set in the browser, it has the shape of{" "}
+        <Code>{"${experimentId}.${variantId}"}</Code>. You're assigned to:{" "}
         <b>{cookie}</b>
       </Text>
       <Text className="mb-4">
@@ -58,8 +74,11 @@ export default function Index() {
       <Button variant="secondary" onClick={removeCookie}>
         Remove cookie & reload
       </Button>
+      <Button variant="secondary" onClick={sendEvent}>
+        SEND
+      </Button>
     </>
-  )
+  );
 }
 
-Index.Layout = OptimizeLayout
+Index.Layout = OptimizeLayout;

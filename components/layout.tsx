@@ -16,6 +16,7 @@ function gaHandler() {
     (window as any).dataLayer || []);
 
   dataLayer.push(arguments);
+  console.log("test", arguments);
 }
 
 const OptimizeLayout: FC<LayoutProps> = ({ children, ...props }) => {
